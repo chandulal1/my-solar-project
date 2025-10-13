@@ -1,0 +1,34 @@
+name: solar-system-project
+
+on:
+   workflow_dispatch:
+       push:
+       branches:
+         - main
+         - feature/explore
+
+env:
+    MANGO_URI: 'mangodb+srv://supercluster.d83jj.mangodb.net/superdata'
+    MANGO_USERNAME: superuser
+    MANGO_PASSWORD: ${{ secrets.MANGO_DBPASSWORD }}
+
+
+job:
+   my-project:
+      name: unit testing
+      runs-on: ubuntu-latest
+      steps:
+      - name: Checkout Repository
+        uses: actions/Checkout@V5
+
+      - name: Node-js-setup
+        uses: actions/setup-node@V3
+        with:
+          node-version: 18
+
+      - name: npm installing
+        run: npm install
+      
+      - name: npm testing
+        run: npm test
+
