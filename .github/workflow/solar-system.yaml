@@ -12,7 +12,6 @@ env:
     MANGO_USERNAME: superuser
     MANGO_PASSWORD: ${{ secrets.MANGO_DBPASSWORD }}
 
-
 job:
    my-project:
       name: unit testing
