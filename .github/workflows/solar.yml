@@ -42,6 +42,6 @@ jobs:
       - name: Archive test results
         uses: actions/upload-artifact@v4
         with:
-            name: test-results1
+            name: test-results
             path: test-results1.xml
 
