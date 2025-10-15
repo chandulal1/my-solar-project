@@ -8,9 +8,9 @@ on:
           - feature/explore
 
 env:
-    MANGO_URI: 'mangodb+srv://supercluster.d83jj.mangodb.net/superdata'
-    MANGO_USERNAME: superuser
-    MANGO_PASSWORD: ${{ secrets.MANGO_DBPASSWORD }}
+    MONGO_URI: 'mangodb+srv://supercluster.d83jj.mangodb.net/superdata'
+    MONGO_USERNAME: superuser
+    MONGO_PASSWORD: ${{ secrets.MANGO_DBPASSWORD }}
 
 jobs:
    my-project:
