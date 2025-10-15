@@ -15,7 +15,7 @@ env:
 
 job:
    my-project:
-      name: unit testinggg
+      name: unit testing
       runs-on: ubuntu-latest
       steps:
       - name: Checkout Repository
