@@ -8,7 +8,7 @@ on:
           - feature/explore
 
 env:
-    MONGO_URI: 'mangodb+srv://supercluster.d83jj.mangodb.net/superdata'
+    MONGO_URI: 'mongodb+srv://supercluster.d83jj.mongodb.net/superdata'
     MONGO_USERNAME: superuser
     MONGO_PASSWORD: ${{ secrets.MANGO_DBPASSWORD }}
 
