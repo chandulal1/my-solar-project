@@ -55,7 +55,8 @@ jobs:
 
 
       - name: npm test-results       
-        if: failure() && (steps.npm-testings == 'failure' || steps.npm-testings == 'success')
+        #if: failure() && (steps.npm-testings == 'failure' || steps.npm-testings == 'success')
+        if: always()
         uses: actions/upload-artifact@v4
         with:
             name: test-results
