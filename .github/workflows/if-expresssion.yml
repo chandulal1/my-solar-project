@@ -42,9 +42,20 @@ jobs:
         with:
           node-version: 18
 
-      - name: npm installing
+      - name: npm-installing
         run: npm install
       
-      - name: npm testing
+      - name: npm-testing
+        id: npm-testings
+        run: npm test
+
+      - name: npm coverage
         run: npm run coverage
         continue-on-error: true
+
+      - name: npm test-results       
+        if: failure() && (steps.npm-testings == 'failure' || steps.npm-testings == 'success')
+        uses: actions/upload-artifact@v4
+        with:
+            name: test-results
+            path: test-results3.xml
