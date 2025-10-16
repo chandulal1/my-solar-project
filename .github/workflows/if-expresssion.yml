@@ -53,15 +53,15 @@ jobs:
         continue-on-error: true
         run: npm run coverage
 
-    Docker:
-        needs: [my-project,Code-Coverage]
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout Repository
-              uses: actions/checkout@v5
+   Docker:
+      needs: [my-project,Code-Coverage]
+      runs-on: ubuntu-latest
+      steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
 
-            - name: docker login
-              uses: docker/login-action@v3
-              with:
-                username: ${{ vars.DOCKER_USERNAME }}
-                password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: docker login
+        uses: docker/login-action@v3
+        with:
+            username: ${{ vars.DOCKER_USERNAME }}
+            password: ${{ secrets.DOCKER_PASSWORD }}
