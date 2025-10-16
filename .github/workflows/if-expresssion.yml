@@ -61,3 +61,16 @@ jobs:
         with:
             name: test-results
             path: test-results.xml
+
+    Docker:
+        needs: [my-project,Code-Coverage]
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v5
+
+            - name: docker login
+              uses: docker/login-action@v3
+              with:
+                username: ${{ vars.DOCKER_USERNAME }}
+                password: ${{ secrets.DOCKER_PASSWORD }}
