@@ -33,15 +33,23 @@ jobs:
         with:
           node-version: ${{ matrix.nodejs_version }}
 
-      - name: npm installing
+      - name: Cache NPM dependencies
+        uses: actions/cache@v4
+        with:
+            path: node_modules
+            key: ${{runner.os}}-node-modeules-${{hashFiles('package.json')}}
+
+      - name: npm installing dependencies
         run: npm install
       
       - name: npm testing
         run: npm test
 
-      - name: Archive test results
-        uses: actions/upload-artifact@v4
-        with:
-            name: test-results
-            path: test-results1.xml
+    #   - name: Archive test results
+    #     uses: actions/upload-artifact@v4
+    #     with:
+    #         name: test-results
+    #         path: test-results.xml
+      - name: checking the message
+        run: echo "Done successfully"
 
