@@ -50,8 +50,9 @@ jobs:
         run: npm test
 
       - name: npm coverage
-        run: npm run coverage
         continue-on-error: true
+        run: npm run coverage
+
 
       - name: npm test-results       
         if: failure() && (steps.npm-testings == 'failure' || steps.npm-testings == 'success')
