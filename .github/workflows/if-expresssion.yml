@@ -105,7 +105,7 @@ jobs:
 
    kubernetes:
       needs: [Docker]
-      runs-on: [self-hosted, linux, minikube]
+      runs-on: self-hosted
       steps:
       - name: Checkout Repository
         uses: actions/checkout@v5
