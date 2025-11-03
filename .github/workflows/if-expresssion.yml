@@ -105,7 +105,7 @@ jobs:
 
    kubernetes:
       needs: [Docker]
-      # runs-on: self-hosted
+      runs-on: ubuntu-latest
       # steps:
       # - name: Checkout Repository
       #   uses: actions/checkout@v5
@@ -118,8 +118,6 @@ jobs:
       #     kubectl version --client
       #     echo ---------------------------------
       #     kubectl get nodes
-          runs-on: ubuntu-latest
-
       steps:
       - name: Checkout Repository
         uses: actions/checkout@v5
