@@ -138,3 +138,17 @@ jobs:
       - name: Checking the replace files
         run: |
          cat kubernetes/development/*.yaml
+
+      - name: create Mongo DB secret
+        run: |
+          kubectl -n ${{ vars.NAMESPACE }} create secret generic mongo-db-creds \
+          --from-literal=MONGO_URI=${{ env.MONGO_URI }} \
+          --from-literal=MONGO_USERNAME=${{ env.MONGO_USERNAME }} \
+          --from-literal=MONGO_PASSWORD=${{ env.MONGO_PASSWORD }} \
+          --save-config \
+          --dry-run=client \
+          -o yaml | kubectl apply -f -
+
+      - name: deploy to dev env
+        run: |
+          kubectl apply -f kubernetes/development
