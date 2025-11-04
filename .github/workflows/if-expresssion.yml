@@ -105,36 +105,16 @@ jobs:
 
    kubernetes:
       needs: [Docker]
-      runs-on: ubuntu-latest
-      # steps:
-      # - name: Checkout Repository
-      #   uses: actions/checkout@v5
-    
-      # - name: Install Kubectl CLI
-      #   uses: azure/setup-kubectl@v4
-      
-      # - name: Fetch Kubernetes Cluster Details
-      #   run: |
-      #     kubectl version --client
-      #     echo ---------------------------------
-      #     kubectl get nodes
+      runs-on: self-host
       steps:
       - name: Checkout Repository
         uses: actions/checkout@v5
-
-      - name: Install Kubectl
+    
+      - name: Install Kubectl CLI
         uses: azure/setup-kubectl@v4
-        with:
-          version: 'latest'
-
-      - name: Configure kubeconfig
-        run: |
-          mkdir -p $HOME/.kube
-          echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
-          chmod 600 $HOME/.kube/config
-
-      - name: Verify Cluster Access
+      
+      - name: Fetch Kubernetes Cluster Details
         run: |
           kubectl version --client
-          echo "--------------------------"
+          echo ---------------------------------
           kubectl get nodes
