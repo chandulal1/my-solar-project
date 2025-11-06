@@ -152,3 +152,4 @@ jobs:
       - name: deploy to dev env
         run: |
           kubectl apply -f kubernetes/development
+          kubectl get all -n ${{ vars.NAMESPACE }}
