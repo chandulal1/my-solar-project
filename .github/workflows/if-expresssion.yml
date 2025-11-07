@@ -167,7 +167,7 @@ jobs:
    
    Dev-Integration-Testing:
       if: contains(github.ref, 'feature/')
-      name: Integration-Testing
+      name: dev-Integration-Testing
       needs: [Dev-kubernetes]
       runs-on: self-hosted
       steps:
@@ -242,7 +242,7 @@ jobs:
           echo "APP_INGRESS_HOST=$(kubectl get ing -n ${{ vars.NAMESPACE }} -o jsonpath="{.items[*].spec.tls[*].hosts[*]}")" >> "$GITHUB_OUTPUT"
    
    Prod-Integration-Testing:
-      name: Integration-Testing
+      name: Prod-Integration-Testing
       if: github.ref == 'refs/heads/main'
       needs: [Prod-kubernetes]
       runs-on: self-hosted
