@@ -105,6 +105,8 @@ jobs:
 
    kubernetes:
       needs: [Docker]
+      outputs:
+         APP_INGRESS_URL: ${{ steps.set-ingress-host-address.outputs.APP_INGRESS_HOST }}
       runs-on: self-hosted
       steps:
       - name: Checkout Repository
@@ -153,3 +155,21 @@ jobs:
         run: |
           kubectl apply -f kubernetes/development
           kubectl get all -n ${{ vars.NAMESPACE }}
+      
+      - name: set app ingress host URL
+        id: set-ingress-host-address
+        run: |
+          echo "APP_INGRESS_HOST=$(kubectl get ing -n ${{ vars.NAMESPACE }} -o jsonpath="{.items[*].spec.tls[*].hosts[*]}")" >> "$GITHUB_OUTPUT"
+   
+   Integration-Testing:
+      name: Integration-Testing
+      needs: [kubernetes]
+      runs-on: self-hosted
+      steps:
+      - name: Checkout URL
+        env:
+          URL: ${{ needs.kubernetes.outputs.APP_INGRESS_URL }}
+        run: |
+          echo $URL
+          echo "..............................."
+          curl https://$URL/live -s -k | -jq -r .status | grep -i live
