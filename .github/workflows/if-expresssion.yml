@@ -171,7 +171,7 @@ jobs:
       steps:
       - name: Checkout URL
         env:
-          URL: ${{ needs.kubernetes.outputs.APP_INGRESS_URL }}
+          URL: ${{ needs.Dev-kubernetes.outputs.APP_INGRESS_URL }}
         run: |
           echo $URL
           echo "..............................."
