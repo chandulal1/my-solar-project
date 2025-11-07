@@ -1,0 +1,55 @@
+name: solar-system-project
+
+on:
+   workflow_dispatch:
+   push:
+      branches:
+          - main
+          - feature/explore
+
+env:
+    MONGO_URI: 'mongodb+srv://supercluster.d83jj.mongodb.net/superData'
+    MONGO_USERNAME: superuser
+    MONGO_PASSWORD: ${{ secrets.MANGO_DBPASSWORD }}
+
+jobs:
+   my-project:
+      name: unit testing
+      strategy:
+        matrix:
+            nodejs_version: [ 18, 19, 20 ]
+            operating-system: [ubuntu-latest, macos-latest]
+            exclude:
+               - nodejs_version: 18
+                 operating-system: macos-latest
+
+      runs-on: ${{ matrix.operating-system}}
+      steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+
+      - name: Node-js-setup
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.nodejs_version }}
+
+      - name: Cache NPM dependencies
+        uses: actions/cache@v4
+        with:
+            path: node_modules
+            key: ${{runner.os}}-node-modeules-${{hashFiles('package.json')}}
+
+      - name: npm installing dependencies
+        run: npm install
+      
+      - name: npm testing
+        run: npm test
+
+    #   - name: Archive test results
+    #     uses: actions/upload-artifact@v4
+    #     with:
+    #         name: test-results
+    #         path: test-results.xml
+      - name: checking the message
+        run: echo "Chache checking success new"
+
