@@ -103,7 +103,7 @@ jobs:
             ${{ vars.DOCKER_USERNAME }}/solar-system:${{ github.sha }}
             ghcr.io/${{ github.repository_owner }}/solar-system:${{ github.sha }}
 
-   kubernetes:
+   Dev-kubernetes:
       needs: [Docker]
       environment:
         name: development
@@ -164,14 +164,88 @@ jobs:
         run: |
           echo "APP_INGRESS_HOST=$(kubectl get ing -n ${{ vars.NAMESPACE }} -o jsonpath="{.items[*].spec.tls[*].hosts[*]}")" >> "$GITHUB_OUTPUT"
    
-   Integration-Testing:
+   Dev-Integration-Testing:
       name: Integration-Testing
-      needs: [kubernetes]
+      needs: [Dev-kubernetes]
       runs-on: self-hosted
       steps:
       - name: Checkout URL
         env:
           URL: ${{ needs.kubernetes.outputs.APP_INGRESS_URL }}
+        run: |
+          echo $URL
+          echo "..............................."
+          curl https://$URL/live -s -k | jq -r .status | grep -i live
+   
+   Prod-kubernetes:
+      needs: [Dev-Integration-Testing]
+      environment:
+        name: production
+        url: https://${{ steps.set-ingress-host-address.outputs.APP_INGRESS_HOST }}
+      outputs:
+         APP_INGRESS_URL: ${{ steps.set-ingress-host-address.outputs.APP_INGRESS_HOST }}
+      runs-on: self-hosted
+      steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+    
+      - name: Install Kubectl CLI
+        uses: azure/setup-kubectl@v4
+      
+      - name: Fetch Kubernetes Cluster Details
+        run: |
+          kubectl version --client
+          echo ---------------------------------
+          kubectl get nodes
+
+      - name: save kubernetes ingress controller as variable
+        run: |
+          echo "INGRESS_IP=$(kubectl get svc ingress-nginx-controller -n ingress-nginx -ojsonpath='{.status.loadBalancer.ingress[*].ip}')" >> $GITHUB_ENV
+      
+      - name: Replace tokens
+        uses: cschleiden/replace-tokens@v1
+        with:
+          tokenPrefix: '_{_'
+          tokenSuffix: '_}_'
+          files: '["kubernetes/production/*.yaml"]'
+        env:
+          NAMESPACE: ${{ vars.NAMESPACE }}
+          REPLICAS: ${{ vars.REPLICAS }}
+          IMAGE: ${{ vars.DOCKER_USERNAME }}/solar-system:${{ github.sha }}
+          INGRESS_IP: ${{ env.INGRESS_IP }}
+
+      - name: Checking the replace files
+        run: |
+         cat kubernetes/production/*.yaml
+
+      - name: create Mongo DB secret
+        run: |
+          kubectl -n ${{ vars.NAMESPACE }} create secret generic mongo-db-creds \
+          --from-literal=MONGO_URI=${{ env.MONGO_URI }} \
+          --from-literal=MONGO_USERNAME=${{ env.MONGO_USERNAME }} \
+          --from-literal=MONGO_PASSWORD=${{ env.MONGO_PASSWORD }} \
+          --save-config \
+          --dry-run=client \
+          -o yaml | kubectl apply -f -
+
+      - name: deploy to dev env
+        run: |
+          kubectl apply -f kubernetes/production
+          kubectl get all -n ${{ vars.NAMESPACE }}
+      
+      - name: set app ingress host URL
+        id: set-ingress-host-address
+        run: |
+          echo "APP_INGRESS_HOST=$(kubectl get ing -n ${{ vars.NAMESPACE }} -o jsonpath="{.items[*].spec.tls[*].hosts[*]}")" >> "$GITHUB_OUTPUT"
+   
+   Prod-Integration-Testing:
+      name: Integration-Testing
+      needs: [Prod-kubernetes]
+      runs-on: self-hosted
+      steps:
+      - name: Checkout URL
+        env:
+          URL: ${{ needs.Prod-kubernetes.outputs.APP_INGRESS_URL }}
         run: |
           echo $URL
           echo "..............................."
