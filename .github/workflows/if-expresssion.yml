@@ -243,6 +243,7 @@ jobs:
    
    Prod-Integration-Testing:
       name: Integration-Testing
+      if: github.ref == 'refs/heads/main'
       needs: [Prod-kubernetes]
       runs-on: self-hosted
       steps:
