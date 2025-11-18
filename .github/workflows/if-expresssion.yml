@@ -62,12 +62,12 @@ jobs:
       - name: Download Mocha Artifacts
         uses: actions/download-artifact@v5
         with:
-            name: Mocha-test-results
+            name: Mocha-Test-Result
 
       - name: Download code coverage Artifacts
         uses: actions/download-artifact@v5
         with:
-            name: code-coverage-results
+            name: Code-Coverage-Result
 
       - name: Merge Test Results
         run: |
