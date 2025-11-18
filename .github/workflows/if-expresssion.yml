@@ -53,6 +53,33 @@ jobs:
         continue-on-error: true
         run: npm run coverage
 
+   reports-s3:
+      needs: [my-project,Code-Coverage]
+      name: AWS-S3-Reports
+      runs-on: ubuntu-latest
+      continue-on-error: true
+      steps:
+      - name: Download Mocha Artifacts
+        uses: actions/download-artifact@v3
+        with:
+            name: Mocha test results
+
+      - name: Download code coverage Artifacts
+        uses: actions/download-artifact@v3
+        with:
+            name: code coverage results
+
+      - name: Merge Test Results
+        run: |
+         ls -ltr
+         mkdir reports-${{ github.sha }}
+         mv cobertura-coverage.xml reports-${{ github.sha }}
+         mv test-result.xml reports-${{ github.sha }}
+         ls -ltr reports-${{ github.sha }}
+        
+      - name: Upload to AWS S3
+        run: echo "uploading artifacts"
+        
    Docker:
       needs: [my-project,Code-Coverage]
       permissions:
