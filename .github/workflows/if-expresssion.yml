@@ -27,6 +27,9 @@ jobs:
       - name: npm installing
         run: npm install
       
+      - name: Install mocha-junit-reporter
+        run: npm install mocha-junit-reporter --save-dev
+        
       - name: npm testing
         run: npm test
 
