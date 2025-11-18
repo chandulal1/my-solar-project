@@ -30,9 +30,9 @@ jobs:
       - name: npm testing
         run: npm test
 
-      - name: Upload Mocha Artifacts
+      - name: Archive Test Results
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
           name: Mocha-Test-Result
           path: test-result.xml
@@ -61,10 +61,11 @@ jobs:
       
       - name: Upload code coverage Artifacts
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
           name: Code-Coverage-Result
-          path: cobertura-coverage.xml
+          path: coverage
+
 
    reports-s3:
       needs: [my-project,Code-Coverage]
