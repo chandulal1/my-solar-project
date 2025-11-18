@@ -30,9 +30,9 @@ jobs:
       - name: npm testing
         run: npm test
 
-      - name: Download Mocha Artifacts
+      - name: Upload Mocha Artifacts
         if: always()
-        uses: actions/download-artifact@v5
+        uses: actions/upload-artifact@v5
         with:
           name: Mocha-Test-Result
           path: test-result.xml
@@ -59,9 +59,9 @@ jobs:
         continue-on-error: true
         run: npm run coverage
       
-      - name: Download code coverage Artifacts
+      - name: Upload code coverage Artifacts
         if: always()
-        uses: actions/download-artifact@v5
+        uses: actions/upload-artifact@v5
         with:
           name: Code-Coverage-Result
           path: cobertura-coverage.xml
