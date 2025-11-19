@@ -1,7 +1,7 @@
 name: 'NPM custom action'
 description: 'Greet someone'
 inputs:
-  path-of-folder: node_modules 
+  path-of-folder:
     description: 'Who to greet'
     required: true
 runs:
