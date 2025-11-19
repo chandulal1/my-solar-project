@@ -25,7 +25,7 @@ jobs:
           node-version: 18
 
       - name: compsite-action Cache & npm install 
-        uses: ./.github/custom-actions/npm-action/action.yaml
+        uses: .github/custom-actions/npm-action/action.yaml
         with:
           path-of-folder: node_modules
 
