@@ -24,8 +24,10 @@ jobs:
         with:
           node-version: 18
 
-      - name: npm installing
-        run: npm install
+      - name: compsite-action Cache & npm install 
+        uses: ./.github/custom-actions/npm-action/action.yaml
+        with:
+          path-of-folder: node_modules
 
       - name: npm testing
         run: npm test
@@ -48,8 +50,10 @@ jobs:
         with:
           node-version: 18
 
-      - name: npm-installing
-        run: npm install
+      - name: compsite-action Cache & npm install 
+        uses: ./.github/custom-actions/npm-action/action.yaml
+        with:
+          path-of-folder: node_modules
       
       - name: npm-testing
         id: npm-testings
